@@ -99,14 +99,16 @@ What kind of malicious attacks is your web application (PHP) vulnerable to? Desc
 them briefly, and point out what countermeasures you have developed in your code to prevent
 such attacks.
 \paragraph{Answer}
-There are several types of attacks our application is vulnerable to. We'll handle each of them in order beneath.
+There are several types of attacks a standard web application can be vulnerable to. Many common attacks are handled by our application, and these are discussed below.
 \paragraph{Preventing SQL injection}
 To prevent SQL injection, we never submit any user generated input to the database. For example, log in information is checked by retrieving all user names and passwords from the database, and then compared to what the user actually entered. This way, the database can never be affected by what the user actually enters when logging in.
 When registering a new user, instead of submitting the user name and password directly to the database, prepared statements are used. When using prepared statement, the input that the user submits is never treated as anything else than plain text. For example if the user types in "a'; drop table user; --" as user name, which would, for an application vulnerable to SQL injection, delete the whole user table. In our application however, a user is simply registered with "a'; drop table user; --" as user name, since that is the text that was submitted.
 \paragraph{Preventing session hijacking}
 Hijacking a session using its session id is one common way to get access to restricted areas of a system. To prevent this we've ensured that the session id isn't static for every usage of the system. Every time the user validates himself by his username and password we regenerate the session id. This will make attack much more difficult as an attacker will have to retrieve the new generated session id every time it is generated. To prevent an attacker from retrieving the session id after the user is done with the system we've ensured that the session is destroyed when the user logs out of his account. 
-\paragraph{Safe password storage TODO: SAFE PASSWORD HASHING}
-To ensure that an attacker can't get access to usernames or passwords in the database we've placed the password file for accessing the database outside of our server. This secures the sensitive information as one either has to hack the server and get admin right over it, or one has to have the root password on the system the server is running on. Within the database the passwords are all hashed so if one would somehow miraclously get access to the database one would still need to unhash the passwords. 
+\paragraph{Hiding of database username and password}
+To avoid having the username and password for the database written in plain text in the php files, we created a configuration file outside of the web server's directories. This configuration file contains the username and password to the database, which the php scripts must read in order to communicate with the database. If we hadn't done this, an attacker could possibly have been able to read or download the php code, and discovered the username and password. This would have given the attacker easy access to alter and read our database. Storing this information outside of the web server, makes it impossible for an attacker to find these without having direct access to the server, either by having our username and password, or having root access to the server. 
+\paragraph{Secure password storage}
+Even though we store the username and password to the database as far away from a possible attacker, one should still expect the worst, and assume that an attacker might somehow gain access to our database. Many users use the same usernames and/or passwords on several applications, so to reduce the potential damage an attacker can cause, by discovering user passwords, we do not store the passwords in plain text in our database. Instead, we store the passwords' hashes. This is done using php's built-in password-hash function \cite{php-hash}, which uses the bcrypt \cite{schneier} algorithm. This ensures that the users' passwords are never stored anywhere, so attackers are only able to get the password hashes. The most efficient way to break bcrypt is through exhaustive keyspace search \cite{schneier}, which will take a lot of time.
 \paragraph{Code injection avoidence}
 On some of the systems pages our system had weakness for code injection. The weakness existed in registering new users, either in admin or in register, as when the a new username was inputed a possible attacker could register code which would then run next time someone entered the page. To avoid this weakness we added a validation check for the input within the forms, not accepting any characters but ordinary letters and numbers. By doing this we secured our system further and avoided code injection attacks.
 \paragraph{Mer - sjekk https://www.owasp.org/index.php/Top\_10\_2013-Top\_10}
@@ -133,6 +135,16 @@ On some of the systems pages our system had weakness for code injection. The wea
     The PHP Group.
     PHP manual.
     \url{http://no1.php.net/manual/en/session.configuration.php#ini.session.cookie-secure}
+
+\bibitem{php-hash}
+    The PHP Group.
+    PHP manual.
+    \url{http://www.php.net/manual/en/function.password-hash.php}
+
+\bibitem{schneier}
+    Bruce schneier (1994)
+    Description of a New Variable-Length Key, 64-Bit Block Cipher (Blowfish)
+    \url{https://www.schneier.com/paper-blowfish-fse.html}
 
 \end{thebibliography}
 
