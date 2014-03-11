@@ -54,9 +54,7 @@ The purpose of this lab is to get hands-on experience with web security software
 \section{Certificate Authority}
 \subsection{Q1}
 \paragraph{Question}
-Explain what the string TLS\_DHE\_RSA\_WITH\_AES\_128\_CBC\_SHA means in Figure 4. Com-
-ment on security related issues regarding the cryptographic algorithms used to generate and
-sign your group’s web server certificate (key lengths, algorithms, etc.).
+"Explain what the string TLS\_DHE\_RSA\_WITH\_AES\_128\_CBC\_SHA means in Figure 4. Comment on security related issues regarding the cryptographic algorithms used to generate and sign your group’s web server certificate (key lengths, algorithms, etc.)."
 \paragraph{Answer}
 The string TLS\_DHE\_RSA\_WITH\_AES\_128\_CBC\_SHA is the cipher suite which describes the security configurations for the TLS network connection. The cipher suite consists of of the key exchange (Diffie-Hellman key exchange), authentication (RSA), bulk encryption (AES\_128), and message authentication (CBC using SHA as block cipher encryption). \\
 
@@ -67,21 +65,18 @@ By using SHA2 to sign our server certificate we need to pay attention to the fut
 \section{Access Control and Apache}
 \subsection{Q2}
 \paragraph{Question}
-Explain what you have achieved through each of these verifications. What is the name
-of the person signing the Apache release?
+"Explain what you have achieved through each of these verifications. What is the name of the person signing the Apache release?"
 \paragraph{Answer}
-Name of signer: Jim Jagielski
+Name of signer: Jim Jagielski.
 By verifying the PGP signature, we checked that the downloaded code was good, but as we simply downloaded the key from a public key server (keyserver.mit.edu), we cannot know for sure if everything is legit. To do this, we also had to check the key's fingerprint. For a proper verification of this, we would have to meet face-to-face, or get the hold of this person in another way. As this was hard to get done in a proper way during the lab, it was assumed that the download of PGP signature directly from the Apache Software Foundation could be considered legit and safe.
 \subsection{Q3}
 \paragraph{Question}
-What is the purpose of a certificate chain? Describe on a high-level the steps that your
-browser takes when verifying the authenticity of web page served over HTTPS.
+"What is the purpose of a certificate chain? Describe on a high-level the steps that your browser takes when verifying the authenticity of web page served over HTTPS."
 \paragraph{Answer}
 When a browser first connects to a new server it downloads that servers certificate which includes a private key. The browser then uses the preinstalled trusted certificates and their public keys to determine if the service in question was indeed signed by a trusted certificate authority. When a validation has gone through, the browser checks the certificate for the service ip address and controls this against the currently connected ip address. When this is validated as well the browser generates a symmetric secure connection to the server before a service like HTTP is started. 
 \subsection{Q4}
 \paragraph{Question}
-Web servers offering weak cryptography are subject to several attacks. What kind of
-attacks are feasible? How did you configure your server to prevent such attacks?
+"Web servers offering weak cryptography are subject to several attacks. What kind of attacks are feasible? How did you configure your server to prevent such attacks?"
 \paragraph{Answer}
 For this type of server one of the best ways to get access is by creating a certificate that fits the SSLRequirements, Creating a certificate like this can be time consuming and difficult but not impossible if you can access the information required or get a hold of an certificate in another way.
 Other attacks against web servers with weak cryptography can include man-in-the-middle attacks where the attacker can get hold of information going between two endpoints. Some known attacks to take advantage of this is BEAST, CRIME and BREACH. BEAST was designed to inject a javascript to the victim. This can now be used to capture header info and the encrypted cookie. With this information in hand, the attacker is now able to compare unencrypted and encrypted data, and thus be able to get hold of the initialization vector. This can then be used to decrypt passwords or other valuable information. CRIME and BREACH are attacks further exploiting the possibility to capture cookies going through TLS/SSL. These attacks obtains information by attacking HTTP compression, and thereby making it harder to defend against. The best action against these attacks for now is to make sure TLS and SSL is up to date.
@@ -96,9 +91,7 @@ The flag HTTP-Only is used to make the cookie only accessible through the HTTP p
 The secure flag is used to specify if a cookie should only be sent over secure connections. Setting this flag therefore means that the cookie will never be sent in plain text. \cite{cookie-secure}.
 \subsection{Q6}
 \paragraph{Question}
-What kind of malicious attacks is your web application (PHP) vulnerable to? Describe
-them briefly, and point out what countermeasures you have developed in your code to prevent
-such attacks.
+"What kind of malicious attacks is your web application (PHP) vulnerable to? Describe them briefly, and point out what countermeasures you have developed in your code to prevent such attacks."
 \paragraph{Answer}
 There are several types of attacks a standard web application can be vulnerable to. Many common attacks are handled by our application, and these are discussed below.
 \paragraph{Preventing SQL injection}
