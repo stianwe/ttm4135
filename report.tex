@@ -1,0 +1,93 @@
+\documentclass[11pt, a4paper]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[pdftex]{graphicx}
+\usepackage{amsmath}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{rotating}
+\usepackage{adjustbox}
+\usepackage[titletoc]{appendix}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+\title{Information Security Lab Report}
+
+\author{Øystein Løvdal Andersern, Stian Weie, Bjørn Dølvik}
+
+\begin{document}
+\begin{titlepage}
+\begin{center}
+
+\textsc{\LARGE Norwegian University of Science and Technology}\\[1.5cm]
+
+\textsc{\Large }\\[0.5cm]
+
+% Title
+\HRule \\[0.4cm]
+{ \huge \bfseries Lager brewing techniques \\[0.4cm] }
+
+\HRule \\[1.5cm]
+
+% Author and supervisor
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft} \large
+\emph{Author:}\\
+        John \textsc{}
+        \end{flushleft}
+        \end{minipage}
+
+        \vfill
+
+        % Bottom of the page
+{\large \today}
+
+\end{center}
+\end{titlepage}
+
+\begin{abstract}
+Your abstract.
+\end{abstract}
+\section{Notes (TO BE REMOVED BEFORE DELIVERY)}
+\paragraph{Group name} UmbrellaCorp
+\paragraph{Group number} 42
+\paragraph{Password} sjokomelk
+\paragraph{Endringer} 
+\paragraph{TODO} Skriv litt om at NSA designet SHA, og blablabla med det som har skjedd i det siste..
+
+\section{Introduction}
+The purpose of this lab is to get hands-on experience with web security software. This includes tasks regarding creating and signing certificates, setting up an Apache server with client/server authentication using SSL, set up a SVN and creating static and dynamic web pages with PHP. 
+\section{Part I: Certificate Authority}
+\subsection{Q1} 
+The string TLS\_DHE\_RSA\_WITH\_AES\_128\_CBC\_SHA is the cipher suite which describes the security configurations for the TLS network connection. The cipher suite consists of of the key exchange (Diffie-Hellman key exchange), authentication (RSA), bulk encryption (AES\_128), and message authentication (CBC using SHA as block cipher encryption). 
+
+We used SHA512 (SHA2) to generate and sign our group's web servQer certificate. This means that a key of length 512 was used, and that the algorithm was SHA2. SHA512 is considered "unbroken", but in 2011 an attack was able to break preimage resistance  for 57 out of 80 rounds of SHA512 (ref: Dmitry Khovratovich, Christian Rechberger and Alexandra Savelieva (2011), http://eprint.iacr.org/2011/286.pdf). This does not mean that the algorithm is 71\% broken, but that the algorithm would have been broken if the last 23 round had been removed. A preimage attack attempts to find a message that gives a specific hash value (ref: http://en.wikipedia.org/wiki/Preimage\_resistance).
+Hashen til keyen er 512 bit.. Key-hashen (eller noe?) er 4096???
+\section{Part II: Access Control and Apache}
+\paragraph{Q2}
+Name of signer: Jim Jagielski
+By verifying the PGP signature, we checked that the downloaded code was good, but as we simply downloaded the key from a public key server (keyserver.mit.edu), we cannot know for sure if everything is legit. To do this, we also had to check the key's fingerprint. To properly verify this, we would have to meet face-to-face, which asnfgnsdl;sg blablabla....
+\paragraph{Q3}
+When a browser first connects to a new server it downloads that servers certificate which includes a private key. The browser then uses the preinstalled trusted certificates and their public keys to determine if the service in question was indeed signed by a trusted certificate authority. When a validation has gone through, the browser checks the certificate for the service ip address and controls this against the currently connected ip address. When this is validated as well the browser generates a symmetric secure connection to the server before a service like HTTP is started. 
+\paragraph{Q4}
+For this type of server one of the best ways to get access is by creating a certificate that fits the SSLRequirements, Creating a certificate like this can be time consuming and difficult but not impossible if you can access the information required or get a hold of an certificate in another way.
+\section{Part III: Writing a PHP Application.}
+\paragraph{Q5}
+"Cookies can be a potential security risk if not handled properly, especially if they contain
+sensitive information. Two important flags can be set on cookies: HTTP-Only and secure.
+Explain their purpose and functioning."
+\paragraph{Q6} Under!! :)
+\paragraph{Preventing SQL injection}
+To prevent SQL injection, we never submit any user generated input to the database. For example, log in information is checked by retrieving all user names and passwords from the database, and then compared to what the user actually entered. This way, the database can never be affected by what the user actually enters when logging in.
+When registering a new user, instead of submitting the user name and password directly to the database, prepared statements are used. When using prepared statement, the input that the user submits is never treated as anything else than plain text. For example if the user types in "a'; drop table user; --" as user name, which would, for an application vulnerable to SQL injection, delete the whole user table. In our application however, a user is simply registered with "a'; drop table user; --" as user name, since that is the text that was submitted.
+\paragraph{Preventing session hijacking}
+Hijacking a session using its session id is one common way to get access to restricted areas of a system. To prevent this we've ensured that the session id isn't static for every usage of the system. Every time the user validates himself by his username and password we regenerate the session id. This will make attack much more difficult as an attacker will have to retrieve the new generated session id every time it is generated. To prevent an attacker from retrieving the session id after the user is done with the system we've ensured that the session is destroyed when the user logs out of his account. 
+\paragraph{Safe password storage TODO: SAFE PASSWORD HASHING}
+To ensure that an attacker can't get access to usernames or passwords in the database we've placed the password file for accessing the database outside of our server. This secures the sensitive information as one either has to hack the server and get admin right over it, or one has to have the root password on the system the server is running on. Within the database the passwords are all hashed so if one would somehow miraclously get access to the database one would still need to unhash the passwords. 
+\paragraph{Code injection avoidence}
+On some of the systems pages our system had weakness for code injection. The weakness existed in registering new users, either in admin or in register, as when the a new username was inputed a possible attacker could register code which would then run next time someone entered the page. To avoid this weakness we added a validation check for the input within the forms, not accepting any characters but ordinary letters and numbers. By doing this we secured our system further and avoided code injection attacks. 
+\paragraph{Mer - sjekk https://www.owasp.org/index.php/Top\_10\_2013-Top\_10}
+\section{Conclusion}
+\end{document}
