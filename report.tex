@@ -27,21 +27,16 @@
 
 % Title
 \HRule \\[0.4cm]
-{ \huge \bfseries Lager brewing techniques \\[0.4cm] }
+{ \huge \bfseries Information Security Lab Report \\[0.4cm] }
 
 \HRule \\[1.5cm]
 
-% Author and supervisor
-\begin{minipage}{0.4\textwidth}
-\begin{flushleft} \large
-\emph{Author:}\\
-        John \textsc{}
-        \end{flushleft}
-        \end{minipage}
+{\large Group 42:}\\[0.5cm]
 
-        \vfill
+Øystein \textsc{Løvdal Andersen}\\
+Bjørn \textsc{Dølvik}\\
+Stian \textsc{Weie}\\[4.0cm]
 
-        % Bottom of the page
 {\large \today}
 
 \end{center}
@@ -50,6 +45,9 @@
 \begin{abstract}
 Your abstract.
 \end{abstract}
+\tableofcontents
+\clearpage
+
 \section{Notes (TO BE REMOVED BEFORE DELIVERY)}
 \paragraph{Group name} UmbrellaCorp
 \paragraph{Group number} 42
@@ -60,7 +58,7 @@ Your abstract.
 \section{Introduction}
 The purpose of this lab is to get hands-on experience with web security software. This includes tasks regarding creating and signing certificates, setting up an Apache server with client/server authentication using SSL, set up a SVN and creating static and dynamic web pages with PHP. This will thus give practical practise in how parts of the teoretical curriculum of the course is handled in a real web service. This report will present results that were obtained during the lab, and give reasoning for the choices that were made. 
 \section{Part I: Certificate Authority}
-\subsection{Q1} 
+\paragraph{Q1} 
 The string TLS\_DHE\_RSA\_WITH\_AES\_128\_CBC\_SHA is the cipher suite which describes the security configurations for the TLS network connection. The cipher suite consists of of the key exchange (Diffie-Hellman key exchange), authentication (RSA), bulk encryption (AES\_128), and message authentication (CBC using SHA as block cipher encryption). 
 
 We used SHA512 (SHA2) to generate and sign our group's web servQer certificate. This means that a key of length 512 was used, and that the algorithm was SHA2. SHA512 is considered "unbroken", but in 2011 an attack was able to break preimage resistance  for 57 out of 80 rounds of SHA512 (ref: Dmitry Khovratovich, Christian Rechberger and Alexandra Savelieva (2011), http://eprint.iacr.org/2011/286.pdf). This does not mean that the algorithm is 71\% broken, but that the algorithm would have been broken if the last 23 round had been removed. A preimage attack attempts to find a message that gives a specific hash value (ref: http://en.wikipedia.org/wiki/Preimage\_resistance).
@@ -78,6 +76,9 @@ For this type of server one of the best ways to get access is by creating a cert
 "Cookies can be a potential security risk if not handled properly, especially if they contain
 sensitive information. Two important flags can be set on cookies: HTTP-Only and secure.
 Explain their purpose and functioning."
+\paragraph{Q5 answer}
+The flag HTTP-Only is used to make the cookie only accessible through the HTTP protocol. A HTTP-Only cookie cannot be accessed by scripting languages (since it is HTTP-Only), which reduces the possibility for XSS (cross-site scripting) attacks. (ref.: http://no1.php.net/manual/en/session.configuration.php\#ini.session.cookie-httponly).
+The secure flag is used to specify if a cookie should only be sent over secure connections. Setting this flag therefore means that the cookie will never be sent in plain text. (ref.: http://no1.php.net/manual/en/session.configuration.php\#ini.session.cookie-secure).
 \paragraph{Q6} Under!! :)
 \paragraph{Preventing SQL injection}
 To prevent SQL injection, we never submit any user generated input to the database. For example, log in information is checked by retrieving all user names and passwords from the database, and then compared to what the user actually entered. This way, the database can never be affected by what the user actually enters when logging in.
