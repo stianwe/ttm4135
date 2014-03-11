@@ -84,6 +84,7 @@ Web servers offering weak cryptography are subject to several attacks. What kind
 attacks are feasible? How did you configure your server to prevent such attacks?
 \paragraph{Answer}
 For this type of server one of the best ways to get access is by creating a certificate that fits the SSLRequirements, Creating a certificate like this can be time consuming and difficult but not impossible if you can access the information required or get a hold of an certificate in another way.
+Other attacks against web servers with weak cryptography can include man-in-the-middle attacks where the attacker can get hold of information going between two endpoints. Some known attacks to take advantage of this is BEAST, CRIME and BREACH. BEAST was designed to inject a javascript to the victim. This can now be used to capture header info and the encrypted cookie. With this information in hand, the attacker is now able to compare unencrypted and encrypted data, and thus be able to get hold of the initialization vector. This can then be used to decrypt passwords or other valuable information. CRIME and BREACH are attacks further exploiting the possibility to capture cookies going through TLS/SSL. These attacks obtains information by attacking HTTP compression, and thereby making it harder to defend against. The best action against these attacks for now is to make sure TLS and SSL is up to date.
 \section{Writing a PHP Application.}
 \subsection{Q5}
 \paragraph{Question}
@@ -111,7 +112,18 @@ To avoid having the username and password for the database written in plain text
 Even though we store the username and password to the database as far away from a possible attacker, one should still expect the worst, and assume that an attacker might somehow gain access to our database. Many users use the same usernames and/or passwords on several applications, so to reduce the potential damage an attacker can cause, by discovering user passwords, we do not store the passwords in plain text in our database. Instead, we store the passwords' hashes. This is done using php's built-in password-hash function \cite{php-hash}, which uses the bcrypt \cite{schneier} algorithm. This ensures that the users' passwords are never stored anywhere, so attackers are only able to get the password hashes. The most efficient way to break bcrypt is through exhaustive keyspace search \cite{schneier}, which will take a lot of time.
 \paragraph{Code injection avoidence}
 On some of the systems pages our system had weakness for code injection. The weakness existed in registering new users, either in admin or in register, as when the a new username was inputed a possible attacker could register code which would then run next time someone entered the page. To avoid this weakness we added a validation check for the input within the forms, not accepting any characters but ordinary letters and numbers. By doing this we secured our system further and avoided code injection attacks.
-\paragraph{Mer - sjekk https://www.owasp.org/index.php/Top\_10\_2013-Top\_10}
+
+\section{Results}
+The lab results consisted of a complete web service including several security measures and functionalities. Each part of the system will be described briefly below.
+\paragraph{Certificates}
+The system consists of two parts; one not requiring authentication and one that does. The latter uses certificates to validate and authenticate connecting users to ensure that only accepted users are allowed to access this part of the system. 
+\paragraph{Web Server}
+An apache web server is used to run the system. The webserver maintains the SSL certificate authentication and hosts the systems web pages.
+\paragraph{Web pages}
+To achieve some sort of human interaction several web pages provides different kinds of functionality which allows a user to get some sort of feedbacks. The web pages are written in HTML and PHP and provides functionality as authenticate users, register new users, log in and out, manage cookies and sessions, and admin settings.
+\paragraph{Database}
+A database is used for storing of user information. Within the systems database information like usernames and hashed passwords are stored so it easily can be retrieved by the requering application.
+ 
 \section{Conclusion}
 
 \begin{thebibliography}{9}
