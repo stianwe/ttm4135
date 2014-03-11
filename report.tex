@@ -48,38 +48,57 @@ Your abstract.
 \tableofcontents
 \clearpage
 
-\section{Notes (TO BE REMOVED BEFORE DELIVERY)}
-\paragraph{Group name} UmbrellaCorp
-\paragraph{Group number} 42
-\paragraph{Password} sjokomelk
-\paragraph{Endringer} 
-\paragraph{TODO} Skriv litt om at NSA designet SHA, og blablabla med det som har skjedd i det siste..
-
 \section{Introduction}
 The purpose of this lab is to get hands-on experience with web security software. This includes tasks regarding creating and signing certificates, setting up an Apache server with client/server authentication using SSL, set up a SVN and creating static and dynamic web pages with PHP. 
-\section{Part I: Certificate Authority}
-\paragraph{Q1} 
-The string TLS\_DHE\_RSA\_WITH\_AES\_128\_CBC\_SHA is the cipher suite which describes the security configurations for the TLS network connection. The cipher suite consists of of the key exchange (Diffie-Hellman key exchange), authentication (RSA), bulk encryption (AES\_128), and message authentication (CBC using SHA as block cipher encryption). 
+\section{Certificate Authority}
+\subsection{Q1}
+\paragraph{Question}
+Explain what the string TLS\_DHE\_RSA\_WITH\_AES\_128\_CBC\_SHA means in Figure 4. Com-
+ment on security related issues regarding the cryptographic algorithms used to generate and
+sign your group’s web server certificate (key lengths, algorithms, etc.).
+\paragraph{Answer} 
+The string TLS\_DHE\_RSA\_WITH\_AES\_128\_CBC\_SHA is the cipher suite which describes the security configurations for the TLS network connection. The cipher suite consists of the key exchange (Diffie-Hellman key exchange), authentication (RSA), bulk encryption (AES\_128), and message authentication (CBC using SHA as block cipher encryption).\\
 
-We used SHA512 (SHA2) to generate and sign our group's web servQer certificate. This means that a key of length 512 was used, and that the algorithm was SHA2. SHA512 is considered "unbroken", but in 2011 an attack was able to break preimage resistance  for 57 out of 80 rounds of SHA512 (ref: Dmitry Khovratovich, Christian Rechberger and Alexandra Savelieva (2011), http://eprint.iacr.org/2011/286.pdf). This does not mean that the algorithm is 71\% broken, but that the algorithm would have been broken if the last 23 round had been removed. A preimage attack attempts to find a message that gives a specific hash value (ref: http://en.wikipedia.org/wiki/Preimage\_resistance).
+We used SHA512 (SHA2) to generate and sign our group's web servQer certificate. This means that a key of length 512 was used, and that the algorithm was SHA2. SHA512 is considered "unbroken", but in 2011 an attack was able to break preimage resistance  for 57 out of 80 rounds of SHA512 (ref: Dmitry Khovratovich, Christian Rechberger and Alexandra Savelieva (2011), http://eprint.iacr.org/2011/286.pdf). This does not mean that the algorithm is 71\% broken, but that the algorithm would have been broken if the last 23 round had been removed. A preimage attack attempts to find a message that gives a specific hash value (ref: http://en.wikipedia.org/wiki/Preimage\_resistance).\\
+
+By using SHA2 to sign our server certificate we need to pay attention to the future to ensure that the system isn't comprimised. Due to recent news it has been alerted that the National Security Agency has had an influence on the development of several security methods and thereby deliberty comprimising them as to get access. As SHA1 was one of these security measures comprimised SHA2 might be as well. It is then important to pay attention if the future should reveal that SHA2 also is comprimised by this.
 Hashen til keyen er 512 bit.. Key-hashen (eller noe?) er 4096???
-\section{Part II: Access Control and Apache}
-\paragraph{Q2}
+\section{Access Control and Apache}
+\subsection{Q2}
+\paragraph{Question}
+Explain what you have achieved through each of these verifications. What is the name
+of the person signing the Apache release?
+\paragraph{Answer}
 Name of signer: Jim Jagielski
 By verifying the PGP signature, we checked that the downloaded code was good, but as we simply downloaded the key from a public key server (keyserver.mit.edu), we cannot know for sure if everything is legit. To do this, we also had to check the key's fingerprint. To properly verify this, we would have to meet face-to-face, which asnfgnsdl;sg blablabla....
-\paragraph{Q3}
+\subsection{Q3}
+\paragraph{Question}
+What is the purpose of a certificate chain? Describe on a high-level the steps that your
+browser takes when verifying the authenticity of web page served over HTTPS.
+\paragraph{Answer}
 When a browser first connects to a new server it downloads that servers certificate which includes a private key. The browser then uses the preinstalled trusted certificates and their public keys to determine if the service in question was indeed signed by a trusted certificate authority. When a validation has gone through, the browser checks the certificate for the service ip address and controls this against the currently connected ip address. When this is validated as well the browser generates a symmetric secure connection to the server before a service like HTTP is started. 
-\paragraph{Q4}
+\subsection{Q4}
+\paragraph{Question}
+Web servers offering weak cryptography are subject to several attacks. What kind of
+attacks are feasible? How did you configure your server to prevent such attacks?
+\paragraph{Answer}
 For this type of server one of the best ways to get access is by creating a certificate that fits the SSLRequirements, Creating a certificate like this can be time consuming and difficult but not impossible if you can access the information required or get a hold of an certificate in another way.
-\section{Part III: Writing a PHP Application.}
-\paragraph{Q5}
+\section{Writing a PHP Application.}
+\subsection{Q5}
+\paragraph{Question}
 "Cookies can be a potential security risk if not handled properly, especially if they contain
 sensitive information. Two important flags can be set on cookies: HTTP-Only and secure.
 Explain their purpose and functioning."
-\paragraph{Q5 answer}
+\paragraph{Answer}
 The flag HTTP-Only is used to make the cookie only accessible through the HTTP protocol. A HTTP-Only cookie cannot be accessed by scripting languages (since it is HTTP-Only), which reduces the possibility for XSS (cross-site scripting) attacks. (ref.: http://no1.php.net/manual/en/session.configuration.php\#ini.session.cookie-httponly).
 The secure flag is used to specify if a cookie should only be sent over secure connections. Setting this flag therefore means that the cookie will never be sent in plain text. (ref.: http://no1.php.net/manual/en/session.configuration.php\#ini.session.cookie-secure).
-\paragraph{Q6} Under!! :)
+\subsection{Q6}
+\paragraph{Question}
+What kind of malicious attacks is your web application (PHP) vulnerable to? Describe
+them briefly, and point out what countermeasures you have developed in your code to prevent
+such attacks.
+\paragraph{Answer}
+There are several types of attacks our application is vulnerable to. We'll handle each of them in order beneath.
 \paragraph{Preventing SQL injection}
 To prevent SQL injection, we never submit any user generated input to the database. For example, log in information is checked by retrieving all user names and passwords from the database, and then compared to what the user actually entered. This way, the database can never be affected by what the user actually enters when logging in.
 When registering a new user, instead of submitting the user name and password directly to the database, prepared statements are used. When using prepared statement, the input that the user submits is never treated as anything else than plain text. For example if the user types in "a'; drop table user; --" as user name, which would, for an application vulnerable to SQL injection, delete the whole user table. In our application however, a user is simply registered with "a'; drop table user; --" as user name, since that is the text that was submitted.
