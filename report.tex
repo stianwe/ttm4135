@@ -79,7 +79,7 @@ When a browser first connects to a new server it downloads that servers certific
 "Web servers offering weak cryptography are subject to several attacks. What kind of attacks are feasible? How did you configure your server to prevent such attacks?"
 \paragraph{Answer}
 For this type of server one of the best ways to get access is by creating a certificate that fits the SSLRequirements, Creating a certificate like this can be time consuming and difficult but not impossible if you can access the information required or get a hold of an certificate in another way.
-Other attacks against web servers with weak cryptography can include man-in-the-middle attacks where the attacker can get hold of information going between two endpoints. Some known attacks to take advantage of this is BEAST, CRIME and BREACH. BEAST was designed to inject a javascript to the victim. This can now be used to capture header info and the encrypted cookie. With this information in hand, the attacker is now able to compare unencrypted and encrypted data, and thus be able to get hold of the initialization vector. This can then be used to decrypt passwords or other valuable information. CRIME and BREACH are attacks further exploiting the possibility to capture cookies going through TLS/SSL. These attacks obtains information by attacking HTTP compression, and thereby making it harder to defend against. The best action against these attacks for now is to make sure TLS and SSL is up to date.
+Other attacks against web servers with weak cryptography can include man-in-the-middle attacks where the attacker can get hold of information going between two endpoints. Some known attacks to take advantage of this is BEAST, CRIME and BREACH. BEAST was designed to inject a javascript to the victim. This can now be used to capture header info and the encrypted cookie. With this information in hand, the attacker is now able to compare unencrypted and encrypted data, and thus be able to get hold of the initialization vector. This can then be used to decrypt passwords or other valuable information. \cite{context}. CRIME and BREACH are attacks further exploiting the possibility to capture cookies going through TLS/SSL. These attacks obtains information by attacking HTTP compression, and thereby making it harder to defend against. \cite{iSEC}. The best action against these attacks for now is to make sure TLS and SSL is up to date.
 \section{Writing a PHP Application.}
 \subsection{Q5}
 \paragraph{Question}
@@ -150,6 +150,16 @@ A database is used for storing of user information. Within the systems database 
     Bruce schneier (1994)
     Description of a New Variable-Length Key, 64-Bit Block Cipher (Blowfish)
     \url{https://www.schneier.com/paper-blowfish-fse.html}
+
+\bibitem{context}
+    Context Information Security
+    Server Technologies - HTTPS BEAST Attack
+    \url{http://contextis.com/research/blog/server-technologies-https-beast-attack/}
+
+\bibitem{iSEC}
+    iSEC Partners
+    Details on the CRIME Attack
+    \url{https://isecpartners.com/blog/2012/september/details-on-the-crime-attack.aspx}
 
 \end{thebibliography}
 
