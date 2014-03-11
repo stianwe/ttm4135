@@ -114,13 +114,17 @@ The lab results consisted of a complete web service including several security m
 \paragraph{Certificates}
 The system consists of two parts; one not requiring authentication and one that does. The latter uses certificates to validate and authenticate connecting users to ensure that only accepted users are allowed to access this part of the system. 
 \paragraph{Web Server}
-An apache web server is used to run the system. The webserver maintains the SSL certificate authentication and hosts the systems web pages.
+An apache web server is used to run the system. The webserver maintains the SSL certificate authentication and hosts the system's web pages.
 \paragraph{Web pages}
 To achieve some sort of human interaction several web pages provides different kinds of functionality which allows a user to get some sort of feedbacks. The web pages are written in HTML and PHP and provides functionality as authenticate users, register new users, log in and out, manage cookies and sessions, and admin settings.
 \paragraph{Database}
-A database is used for storing of user information. Within the systems database information like usernames and hashed passwords are stored so it easily can be retrieved by the requering application.
+A database is used for storing of user information. Within the system's database information like usernames and hashed passwords are stored so it easily can be retrieved by the requering application.
+
+\section{Discussion}
+During implementation of the system we've chosen to use different kind of security measures after what wereasoned would be most secure. Using the SHA512 algorithm for signing of certificates we secure the authenticity of our certificates as this algorithm is one of the safest available and is proven to be quite difficult to exploit. By using a database it is essential to secure sensitive data and prevent loss of information, and we do this by hashing data as well as ensuring that no code or SQL injection occur, we handled all user input as plain text to achieve this. To ensure that cookies aren't transferred in plaintext we've flagged it for secure. To secure the sessions we regenerate the session id every time the user authenticates himself by username and password.   
  
 \section{Conclusion}
+During these three weeks of labwork we have acomplished to create a web service that employs different kinds of security measures which will provide a secure system. We learned how to implement up-to-date security using open software and deploy this on our own.  
 
 \begin{thebibliography}{9}
 
