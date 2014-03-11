@@ -78,6 +78,9 @@ For this type of server one of the best ways to get access is by creating a cert
 "Cookies can be a potential security risk if not handled properly, especially if they contain
 sensitive information. Two important flags can be set on cookies: HTTP-Only and secure.
 Explain their purpose and functioning."
+\paragraph{Q5 answer}
+The flag HTTP-Only is used to make the cookie only accessible through the HTTP protocol. A HTTP-Only cookie cannot be accessed by scripting languages (since it is HTTP-Only), which reduces the possibility for XSS (cross-site scripting) attacks. (ref.: http://no1.php.net/manual/en/session.configuration.php\#ini.session.cookie-httponly).
+The secure flag is used to specify if a cookie should only be sent over secure connections. Setting this flag therefore means that the cookie will never be sent in plain text. (ref.: http://no1.php.net/manual/en/session.configuration.php\#ini.session.cookie-secure).
 \paragraph{Q6} Under!! :)
 \paragraph{Preventing SQL injection}
 To prevent SQL injection, we never submit any user generated input to the database. For example, log in information is checked by retrieving all user names and passwords from the database, and then compared to what the user actually entered. This way, the database can never be affected by what the user actually enters when logging in.
