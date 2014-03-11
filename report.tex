@@ -10,6 +10,7 @@
 \usepackage{rotating}
 \usepackage{adjustbox}
 \usepackage[titletoc]{appendix}
+\usepackage{hyperref}
 
 \newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
 
@@ -63,7 +64,7 @@ The purpose of this lab is to get hands-on experience with web security software
 \subsection{Q1} 
 The string TLS\_DHE\_RSA\_WITH\_AES\_128\_CBC\_SHA is the cipher suite which describes the security configurations for the TLS network connection. The cipher suite consists of of the key exchange (Diffie-Hellman key exchange), authentication (RSA), bulk encryption (AES\_128), and message authentication (CBC using SHA as block cipher encryption). 
 
-We used SHA512 (SHA2) to generate and sign our group's web servQer certificate. This means that a key of length 512 was used, and that the algorithm was SHA2. SHA512 is considered "unbroken", but in 2011 an attack was able to break preimage resistance  for 57 out of 80 rounds of SHA512 (ref: Dmitry Khovratovich, Christian Rechberger and Alexandra Savelieva (2011), http://eprint.iacr.org/2011/286.pdf). This does not mean that the algorithm is 71\% broken, but that the algorithm would have been broken if the last 23 round had been removed. A preimage attack attempts to find a message that gives a specific hash value (ref: http://en.wikipedia.org/wiki/Preimage\_resistance).
+We used SHA512 (SHA2) to generate and sign our group's web servQer certificate. This means that a key of length 512 was used, and that the algorithm was SHA2. SHA512 is considered "unbroken", but in 2011 an attack was able to break preimage resistance  for 57 out of 80 rounds of SHA512 \cite{sha512-attack}. This does not mean that the algorithm is 71\% broken, but that the algorithm would have been broken if the last 23 round had been removed. A preimage attack attempts to find a message that gives a specific hash value \cite{preimage-resistance}.
 Hashen til keyen er 512 bit.. Key-hashen (eller noe?) er 4096???
 \section{Part II: Access Control and Apache}
 \paragraph{Q2}
@@ -79,8 +80,8 @@ For this type of server one of the best ways to get access is by creating a cert
 sensitive information. Two important flags can be set on cookies: HTTP-Only and secure.
 Explain their purpose and functioning."
 \paragraph{Q5 answer}
-The flag HTTP-Only is used to make the cookie only accessible through the HTTP protocol. A HTTP-Only cookie cannot be accessed by scripting languages (since it is HTTP-Only), which reduces the possibility for XSS (cross-site scripting) attacks. (ref.: http://no1.php.net/manual/en/session.configuration.php\#ini.session.cookie-httponly).
-The secure flag is used to specify if a cookie should only be sent over secure connections. Setting this flag therefore means that the cookie will never be sent in plain text. (ref.: http://no1.php.net/manual/en/session.configuration.php\#ini.session.cookie-secure).
+The flag HTTP-Only is used to make the cookie only accessible through the HTTP protocol. A HTTP-Only cookie cannot be accessed by scripting languages (since it is HTTP-Only), which reduces the possibility for XSS (cross-site scripting) attacks. \cite{cookie-http}
+The secure flag is used to specify if a cookie should only be sent over secure connections. Setting this flag therefore means that the cookie will never be sent in plain text. \cite{cookie-secure}
 \paragraph{Q6} Under!! :)
 \paragraph{Preventing SQL injection}
 To prevent SQL injection, we never submit any user generated input to the database. For example, log in information is checked by retrieving all user names and passwords from the database, and then compared to what the user actually entered. This way, the database can never be affected by what the user actually enters when logging in.
@@ -90,7 +91,32 @@ Hijacking a session using its session id is one common way to get access to rest
 \paragraph{Safe password storage TODO: SAFE PASSWORD HASHING}
 To ensure that an attacker can't get access to usernames or passwords in the database we've placed the password file for accessing the database outside of our server. This secures the sensitive information as one either has to hack the server and get admin right over it, or one has to have the root password on the system the server is running on. Within the database the passwords are all hashed so if one would somehow miraclously get access to the database one would still need to unhash the passwords. 
 \paragraph{Code injection avoidence}
-On some of the systems pages our system had weakness for code injection. The weakness existed in registering new users, either in admin or in register, as when the a new username was inputed a possible attacker could register code which would then run next time someone entered the page. To avoid this weakness we added a validation check for the input within the forms, not accepting any characters but ordinary letters and numbers. By doing this we secured our system further and avoided code injection attacks. 
+On some of the systems pages our system had weakness for code injection. The weakness existed in registering new users, either in admin or in register, as when the a new username was inputed a possible attacker could register code which would then run next time someone entered the page. To avoid this weakness we added a validation check for the input within the forms, not accepting any characters but ordinary letters and numbers. By doing this we secured our system further and avoided code injection attacks.
 \paragraph{Mer - sjekk https://www.owasp.org/index.php/Top\_10\_2013-Top\_10}
 \section{Conclusion}
+
+\begin{thebibliography}{9}
+
+\bibitem{sha512-attack}
+    Dmitry Khovratovich, Christian Rechberger, and Alexandra Savelieva (2011).
+    Bicliques for Preimages: Attacks on Skein-512 and the SHA-2 family.
+    \url{http://eprint.iacr.org/2011/286.pdf}
+
+\bibitem{preimage-resistance}
+    The Wikimedia Foundation.
+    Wikipedia - Preimage resistance.
+    \url{http://en.wikipedia.org/wiki/Preimage_resistance}
+
+\bibitem{cookie-http}
+    The PHP Group.
+    PHP manual.
+    \url{http://no1.php.net/manual/en/session.configuration.php#ini.session.cookie-httponly}
+    
+\bibitem{cookie-secure}
+    The PHP Group.
+    PHP manual.
+    \url{http://no1.php.net/manual/en/session.configuration.php#ini.session.cookie-secure}
+
+\end{thebibliography}
+
 \end{document}
