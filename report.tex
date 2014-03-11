@@ -49,20 +49,20 @@ Your abstract.
 \clearpage
 
 \section{Introduction}
-The purpose of this lab is to get hands-on experience with web security software. This includes tasks regarding creating and signing certificates, setting up an Apache server with client/server authentication using SSL, set up a SVN and creating static and dynamic web pages with PHP. 
+The purpose of this lab is to get hands-on experience with web security software. This includes tasks regarding creating and signing certificates, setting up an Apache server with client/server authentication using SSL, set up a SVN and creating static and dynamic web pages with PHP. This will thus give practical practise in how parts of the teoretical curriculum of the course is handled in a real web service. This report will present results that were obtained during the lab, and give reasoning for the choices that were made. 
 \section{Certificate Authority}
 \subsection{Q1}
 \paragraph{Question}
 Explain what the string TLS\_DHE\_RSA\_WITH\_AES\_128\_CBC\_SHA means in Figure 4. Com-
 ment on security related issues regarding the cryptographic algorithms used to generate and
 sign your group’s web server certificate (key lengths, algorithms, etc.).
-\paragraph{Answer} 
-The string TLS\_DHE\_RSA\_WITH\_AES\_128\_CBC\_SHA is the cipher suite which describes the security configurations for the TLS network connection. The cipher suite consists of the key exchange (Diffie-Hellman key exchange), authentication (RSA), bulk encryption (AES\_128), and message authentication (CBC using SHA as block cipher encryption).\\
+\paragraph{Answer}
+The string TLS\_DHE\_RSA\_WITH\_AES\_128\_CBC\_SHA is the cipher suite which describes the security configurations for the TLS network connection. The cipher suite consists of of the key exchange (Diffie-Hellman key exchange), authentication (RSA), bulk encryption (AES\_128), and message authentication (CBC using SHA as block cipher encryption). \\
 
-We used SHA512 (SHA2) to generate and sign our group's web servQer certificate. This means that a key of length 512 was used, and that the algorithm was SHA2. SHA512 is considered "unbroken", but in 2011 an attack was able to break preimage resistance  for 57 out of 80 rounds of SHA512 (ref: Dmitry Khovratovich, Christian Rechberger and Alexandra Savelieva (2011), http://eprint.iacr.org/2011/286.pdf). This does not mean that the algorithm is 71\% broken, but that the algorithm would have been broken if the last 23 round had been removed. A preimage attack attempts to find a message that gives a specific hash value (ref: http://en.wikipedia.org/wiki/Preimage\_resistance).\\
+We used SHA512 (SHA2) to generate and sign our group's web server certificate. SHA512 is considered "unbroken", but in 2011 an attack was able to break preimage resistance  for 57 out of 80 rounds of SHA512 (ref: Dmitry Khovratovich, Christian Rechberger and Alexandra Savelieva (2011), http://eprint.iacr.org/2011/286.pdf). This does not mean that the algorithm is 71\% broken, but that the algorithm would have been broken if the last 23 round had been removed. A preimage attack attempts to find a message that gives a specific hash value (ref: http://en.wikipedia.org/wiki/Preimage\_resistance).\\
 
 By using SHA2 to sign our server certificate we need to pay attention to the future to ensure that the system isn't comprimised. Due to recent news it has been alerted that the National Security Agency has had an influence on the development of several security methods and thereby deliberty comprimising them as to get access. As SHA1 was one of these security measures comprimised SHA2 might be as well. It is then important to pay attention if the future should reveal that SHA2 also is comprimised by this.
-Hashen til keyen er 512 bit.. Key-hashen (eller noe?) er 4096???
+
 \section{Access Control and Apache}
 \subsection{Q2}
 \paragraph{Question}
@@ -70,7 +70,7 @@ Explain what you have achieved through each of these verifications. What is the 
 of the person signing the Apache release?
 \paragraph{Answer}
 Name of signer: Jim Jagielski
-By verifying the PGP signature, we checked that the downloaded code was good, but as we simply downloaded the key from a public key server (keyserver.mit.edu), we cannot know for sure if everything is legit. To do this, we also had to check the key's fingerprint. To properly verify this, we would have to meet face-to-face, which asnfgnsdl;sg blablabla....
+By verifying the PGP signature, we checked that the downloaded code was good, but as we simply downloaded the key from a public key server (keyserver.mit.edu), we cannot know for sure if everything is legit. To do this, we also had to check the key's fingerprint. For a proper verification of this, we would have to meet face-to-face, or get the hold of this person in another way. As this was hard to get done in a proper way during the lab, it was assumed that the download of PGP signature directly from the Apache Software Foundation could be considered legit and safe.
 \subsection{Q3}
 \paragraph{Question}
 What is the purpose of a certificate chain? Describe on a high-level the steps that your
