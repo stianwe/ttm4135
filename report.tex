@@ -28,21 +28,16 @@
 
 % Title
 \HRule \\[0.4cm]
-{ \huge \bfseries Lager brewing techniques \\[0.4cm] }
+{ \huge \bfseries Information Security Lab Report \\[0.4cm] }
 
 \HRule \\[1.5cm]
 
-% Author and supervisor
-\begin{minipage}{0.4\textwidth}
-\begin{flushleft} \large
-\emph{Author:}\\
-        John \textsc{}
-        \end{flushleft}
-        \end{minipage}
+{\large Group 42:}\\[0.5cm]
 
-        \vfill
+Øystein \textsc{Løvdal Andersen}\\
+Bjørn \textsc{Dølvik}\\
+Stian \textsc{Weie}\\[4.0cm]
 
-        % Bottom of the page
 {\large \today}
 
 \end{center}
@@ -51,6 +46,9 @@
 \begin{abstract}
 Your abstract.
 \end{abstract}
+\tableofcontents
+\clearpage
+
 \section{Notes (TO BE REMOVED BEFORE DELIVERY)}
 \paragraph{Group name} UmbrellaCorp
 \paragraph{Group number} 42
@@ -59,17 +57,17 @@ Your abstract.
 \paragraph{TODO} Skriv litt om at NSA designet SHA, og blablabla med det som har skjedd i det siste..
 
 \section{Introduction}
-The purpose of this lab is to get hands-on experience with web security software. This includes tasks regarding creating and signing certificates, setting up an Apache server with client/server authentication using SSL, set up a SVN and creating static and dynamic web pages with PHP. 
+The purpose of this lab is to get hands-on experience with web security software. This includes tasks regarding creating and signing certificates, setting up an Apache server with client/server authentication using SSL, set up a SVN and creating static and dynamic web pages with PHP. This will thus give practical practise in how parts of the teoretical curriculum of the course is handled in a real web service. This report will present results that were obtained during the lab, and give reasoning for the choices that were made. 
 \section{Part I: Certificate Authority}
-\subsection{Q1} 
+\paragraph{Q1} 
 The string TLS\_DHE\_RSA\_WITH\_AES\_128\_CBC\_SHA is the cipher suite which describes the security configurations for the TLS network connection. The cipher suite consists of of the key exchange (Diffie-Hellman key exchange), authentication (RSA), bulk encryption (AES\_128), and message authentication (CBC using SHA as block cipher encryption). 
 
-We used SHA512 (SHA2) to generate and sign our group's web servQer certificate. This means that a key of length 512 was used, and that the algorithm was SHA2. SHA512 is considered "unbroken", but in 2011 an attack was able to break preimage resistance  for 57 out of 80 rounds of SHA512 \cite{sha512-attack}. This does not mean that the algorithm is 71\% broken, but that the algorithm would have been broken if the last 23 round had been removed. A preimage attack attempts to find a message that gives a specific hash value \cite{preimage-resistance}.
-Hashen til keyen er 512 bit.. Key-hashen (eller noe?) er 4096???
+We used SHA512 (SHA2) to generate and sign our group's web server certificate. SHA512 is considered "unbroken", but in 2011 an attack was able to break preimage resistance  for 57 out of 80 rounds of SHA512 \cite{sha512-attack}. This does not mean that the algorithm is 71\% broken, but that the algorithm would have been broken if the last 23 round had been removed. A preimage attack attempts to find a message that gives a specific hash value \cite{preimage-resistance}.
+
 \section{Part II: Access Control and Apache}
 \paragraph{Q2}
 Name of signer: Jim Jagielski
-By verifying the PGP signature, we checked that the downloaded code was good, but as we simply downloaded the key from a public key server (keyserver.mit.edu), we cannot know for sure if everything is legit. To do this, we also had to check the key's fingerprint. To properly verify this, we would have to meet face-to-face, which asnfgnsdl;sg blablabla....
+By verifying the PGP signature, we checked that the downloaded code was good, but as we simply downloaded the key from a public key server (keyserver.mit.edu), we cannot know for sure if everything is legit. To do this, we also had to check the key's fingerprint. For a proper verification of this, we would have to meet face-to-face, or get the hold of this person in another way. As this was hard to get done in a proper way during the lab, it was assumed that the download of PGP signature directly from the Apache Software Foundation could be considered legit and safe.
 \paragraph{Q3}
 When a browser first connects to a new server it downloads that servers certificate which includes a private key. The browser then uses the preinstalled trusted certificates and their public keys to determine if the service in question was indeed signed by a trusted certificate authority. When a validation has gone through, the browser checks the certificate for the service ip address and controls this against the currently connected ip address. When this is validated as well the browser generates a symmetric secure connection to the server before a service like HTTP is started. 
 \paragraph{Q4}
