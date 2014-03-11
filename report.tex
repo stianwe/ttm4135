@@ -109,7 +109,18 @@ Hijacking a session using its session id is one common way to get access to rest
 To ensure that an attacker can't get access to usernames or passwords in the database we've placed the password file for accessing the database outside of our server. This secures the sensitive information as one either has to hack the server and get admin right over it, or one has to have the root password on the system the server is running on. Within the database the passwords are all hashed so if one would somehow miraclously get access to the database one would still need to unhash the passwords. 
 \paragraph{Code injection avoidence}
 On some of the systems pages our system had weakness for code injection. The weakness existed in registering new users, either in admin or in register, as when the a new username was inputed a possible attacker could register code which would then run next time someone entered the page. To avoid this weakness we added a validation check for the input within the forms, not accepting any characters but ordinary letters and numbers. By doing this we secured our system further and avoided code injection attacks.
-\paragraph{Mer - sjekk https://www.owasp.org/index.php/Top\_10\_2013-Top\_10}
+
+\section{Results}
+The lab results consisted of a complete web service including several security measures and functionalities. Each part of the system will be described briefly below.
+\paragraph{Certificates}
+The system consists of two parts; one not requiring authentication and one that does. The latter uses certificates to validate and authenticate connecting users to ensure that only accepted users are allowed to access this part of the system. 
+\paragraph{Web Server}
+An apache web server is used to run the system. The webserver maintains the SSL certificate authentication and hosts the systems web pages.
+\paragraph{Web pages}
+To achieve some sort of human interaction several web pages provides different kinds of functionality which allows a user to get some sort of feedbacks. The web pages are written in HTML and PHP and provides functionality as authenticate users, register new users, log in and out, manage cookies and sessions, and admin settings.
+\paragraph{Database}
+A database is used for storing of user information. Within the systems database information like usernames and hashed passwords are stored so it easily can be retrieved by the requering application.
+ 
 \section{Conclusion}
 
 \begin{thebibliography}{9}
