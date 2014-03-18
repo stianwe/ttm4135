@@ -45,24 +45,21 @@ Stian \textsc{Weie}\\[4.0cm]
 \end{center}
 \end{titlepage}
 
-\begin{abstract}
-Your abstract.
-\end{abstract}
 \tableofcontents
 \clearpage
 
 \section{Introduction}
-The purpose of this lab is to get hands-on experience with web security software. This includes tasks regarding creating and signing certificates, setting up an Apache server with client/server authentication using SSL, set up a SVN and creating static and dynamic web pages with PHP. This will thus give practical practise in how parts of the teoretical curriculum of the course is handled in a real web service. This report will present results that were obtained during the lab, and give reasoning for the choices that were made. 
+The purpose of this lab is to get hands-on experience with web security software. This includes tasks regarding creating and signing certificates, setting up an Apache server with client/server authentication using SSL, setting up SVN and creating static and dynamic web pages with PHP. This will give hands-on experience with how parts of the teoretical curriculum of the course is handled in a real web service. This report will present results that were obtained during the lab, and give reasoning for the choices that were made. 
 \section{Certificate Authority}
 \subsection{Q1}
 \paragraph{Question}
 "Explain what the string TLS\_DHE\_RSA\_WITH\_AES\_128\_CBC\_SHA means in Figure 4. Comment on security related issues regarding the cryptographic algorithms used to generate and sign your group’s web server certificate (key lengths, algorithms, etc.)."
 \paragraph{Answer}
-The string TLS\_DHE\_RSA\_WITH\_AES\_128\_CBC\_SHA is the cipher suite which describes the security configurations for the TLS network connection. The cipher suite consists of of the key exchange (Diffie-Hellman key exchange), authentication (RSA), bulk encryption (AES\_128), and message authentication (CBC using SHA as block cipher encryption). \\
+The string TLS\_DHE\_RSA\_WITH\_AES\_128\_CBC\_SHA is the cipher suite which describes the security configurations for the TLS network connection. The cipher suite consists of the key exchange (Diffie-Hellman key exchange), authentication (RSA), bulk encryption (AES\_128), and message authentication (CBC using SHA as block cipher encryption). \\
 
-We used SHA512 (SHA2) to generate and sign our group's web server certificate. SHA512 is considered "unbroken", but in 2011 an attack was able to break preimage resistance  for 57 out of 80 rounds of SHA512 \cite{sha512-attack}. This does not mean that the algorithm is 71\% broken, but that the algorithm would have been broken if the last 23 round had been removed. A preimage attack attempts to find a message that gives a specific hash value \cite{preimage-resistance}.\\
+We used SHA512 (SHA2) to generate and sign our group's web server certificate. SHA512 is considered "unbroken", but in 2011 an attack was able to break preimage resistance  for 57 out of 80 rounds of SHA512 \cite{sha512-attack}. This does not mean that the algorithm is 71\% broken, but that the algorithm would have been broken if the last 23 rounds had been removed. A preimage attack attempts to find a message that gives a specific hash value \cite{preimage-resistance}.\\
 
-By using SHA2 to sign our server certificate we need to pay attention to the future to ensure that the system isn't comprimised. Due to recent news it has been alerted that the National Security Agency has had an influence on the development of several security methods and thereby deliberty comprimising them as to get access. As SHA1 was one of these security measures comprimised SHA2 might be as well. It is then important to pay attention if the future should reveal that SHA2 also is comprimised by this.
+Due to recent news \cite{NSA} it has been alerted that the National Security Agency has had an influence on the development of several security methods and thereby deliberately compromising them as to get access. It is suspected that the SHA2 might be one of these. Therefore, it is important to pay attention if the future should reveal that SHA2 also is compromised by this.
 
 \section{Access Control and Apache}
 \subsection{Q2}
@@ -70,19 +67,19 @@ By using SHA2 to sign our server certificate we need to pay attention to the fut
 "Explain what you have achieved through each of these verifications. What is the name of the person signing the Apache release?"
 \paragraph{Answer}
 Name of signer: Jim Jagielski.
-By verifying the PGP signature, we checked that the downloaded code was good, but as we simply downloaded the key from a public key server (keyserver.mit.edu), we cannot know for sure if everything is legit. To do this, we also had to check the key's fingerprint. For a proper verification of this, we would have to meet face-to-face, or get the hold of this person in another way. As this was hard to get done in a proper way during the lab, it was assumed that the download of PGP signature directly from the Apache Software Foundation could be considered legit and safe.
+By verifying the PGP signature, we checked that the downloaded code was good, but as we simply downloaded the key from a public key server (keyserver.mit.edu), we cannot know for sure if everything is legit. To do this, we also had to check the key's fingerprint. For a proper verification of this, we would have to meet face-to-face, or get the hold of this person in another way. As this was hard to get done in a proper way during the lab, it was assumed that the download of PGP signature from a well-known source such as MIT, it could be considered safe enough for our purpose.
 \subsection{Q3}
 \paragraph{Question}
 "What is the purpose of a certificate chain? Describe on a high-level the steps that your browser takes when verifying the authenticity of web page served over HTTPS."
 \paragraph{Answer}
-When a browser first connects to a new server it downloads that servers certificate which includes a private key. The browser then uses the preinstalled trusted certificates and their public keys to determine if the service in question was indeed signed by a trusted certificate authority. When a validation has gone through, the browser checks the certificate for the service ip address and controls this against the currently connected ip address. When this is validated as well the browser generates a symmetric secure connection to the server before a service like HTTP is started. 
+When a browser first connects to a new server, it downloads that server's certificate which includes a private key. The browser then uses the preinstalled trusted certificates and their public keys to determine if the service in question was indeed signed by a trusted certificate authority. When a validation has gone through, the browser checks the certificate for the service ip address and validates this against the currently connected ip address. When this is validated as well, the browser generates a symmetric secure connection to the server before a service like HTTP is started. 
 \subsection{Q4}
 \paragraph{Question}
 "Web servers offering weak cryptography are subject to several attacks. What kind of attacks are feasible? How did you configure your server to prevent such attacks?"
 \paragraph{Answer}
-For this type of server one of the best ways to get access is by creating a certificate that fits the SSLRequirements, Creating a certificate like this can be time consuming and difficult but not impossible if you can access the information required or get a hold of an certificate in another way.
-Other attacks against web servers with weak cryptography can include man-in-the-middle attacks where the attacker can get hold of information going between two endpoints. Some known attacks to take advantage of this is BEAST, CRIME and BREACH. BEAST was designed to inject a javascript to the victim. This can now be used to capture header info and the encrypted cookie. With this information in hand, the attacker is now able to compare unencrypted and encrypted data, and thus be able to get hold of the initialization vector. This can then be used to decrypt passwords or other valuable information\cite{context}. CRIME and BREACH are attacks further exploiting the possibility to capture cookies going through TLS/SSL. These attacks obtains information by attacking HTTP compression, and thereby making it harder to defend against\cite{iSEC}. The best action against these attacks for now is to make sure TLS and SSL is up to date.
-For our server we used SHA512 to sign and generate our certificate and we use the latest stable version of Apache to ensure we are up-to-date on TLS/SSL versions. This should give strong cryptography and ensure our web server is secure.
+For this type of server one of the best ways to get access is by creating a certificate that fits the SSLRequirements. Creating a certificate like this can be time consuming and difficult, but not impossible if you can access the information required or get a hold of a certificate in another way.
+Other attacks against web servers with weak cryptography can include man-in-the-middle attacks where the attacker can get ahold of information going between two endpoints. Some known attacks that take advantage of this is BEAST, CRIME and BREACH \cite{cisco}. BEAST was designed to inject a javascript to the victim. This can now be used to capture header info and the encrypted cookie. With this information in hand, the attacker is now able to compare unencrypted and encrypted data, and thus be able to get hold of the initialization vector. This can then be used to decrypt passwords or other valuable information\cite{context}. CRIME and BREACH are attacks further exploiting the possibility to capture cookies going through TLS/SSL. These attacks obtains information by attacking HTTP compression, and thereby making it harder to defend against\cite{iSEC}. The best action against these attacks for now is to make sure TLS and SSL is up to date.
+For our server we used SHA512 to sign and generate our certificate and we use the latest stable version of Apache to ensure we are up-to-date on TLS/SSL versions. This should give strong cryptography and ensure that our web server is secure.
 \section{Writing a PHP Application.}
 \subsection{Q5}
 \paragraph{Question}
@@ -90,24 +87,24 @@ For our server we used SHA512 to sign and generate our certificate and we use th
 sensitive information. Two important flags can be set on cookies: HTTP-Only and secure.
 Explain their purpose and functioning."
 \paragraph{Answer}
-The flag HTTP-Only is used to make the cookie only accessible through the HTTP protocol. A HTTP-Only cookie cannot be accessed by scripting languages (since it is HTTP-Only), which reduces the possibility for XSS (cross-site scripting) attacks. \cite{cookie-http}.
-The secure flag is used to specify if a cookie should only be sent over secure connections. Setting this flag therefore means that the cookie will never be sent in plain text. \cite{cookie-secure}.
+The flag HTTP-Only is used to make the cookie only accessible through the HTTP protocol. A HTTP-Only cookie cannot be accessed by scripting languages (since it is HTTP-Only), which reduces the possibility for XSS (cross-site scripting) attacks \cite{cookie-http}.
+The secure flag is used to specify if a cookie should only be sent over secure connections. Setting this flag therefore means that the cookie will never be sent in plain text \cite{cookie-secure}.
 \subsection{Q6}
 \paragraph{Question}
 "What kind of malicious attacks is your web application (PHP) vulnerable to? Describe them briefly, and point out what countermeasures you have developed in your code to prevent such attacks."
 \paragraph{Answer}
 There are several types of attacks a standard web application can be vulnerable to. Many common attacks are handled by our application, and these are discussed below.
 \subparagraph{Preventing SQL injection}
-To prevent SQL injection, we never submit any user generated input to the database. For example, log in information is checked by retrieving all user names and passwords from the database, and then compared to what the user actually entered. This way, the database can never be affected by what the user actually enters when logging in.
-When registering a new user, instead of submitting the user name and password directly to the database, prepared statements are used. When using prepared statement, the input that the user submits is never treated as anything else than plain text. For example if the user types in "a'; drop table user; --" as user name, which would, for an application vulnerable to SQL injection, delete the whole user table. In our application however, a user is simply registered with "a'; drop table user; --" as user name, since that is the text that was submitted.
+To prevent SQL injection, we never submit any user generated input to the database. For example, log in information is checked by retrieving all usernames and passwords from the database, and then compared to what the user actually enters. This way, the database can never be affected by the user's input when logging in.
+When registering a new user, instead of submitting the username and password directly to the database, prepared statements are used. When using prepared statements, the input that the user submits is never treated as anything else than plain text. For example if the user types in "a'; drop table user; --" as username, the whole user table would be delete in an application vulnerable to SQL injections. In our application however, a user is simply registered with "a'; drop table user; --" as username, since that is the text that was submitted.
 \subparagraph{Preventing session hijacking}
-Hijacking a session using its session id is one common way to get access to restricted areas of a system. To prevent this we've ensured that the session id isn't static for every usage of the system. Every time the user validates himself by his username and password we regenerate the session id. This will make attack much more difficult as an attacker will have to retrieve the new generated session id every time it is generated. To prevent an attacker from retrieving the session id after the user is done with the system we've ensured that the session is destroyed when the user logs out of his account. 
+Hijacking a session using its session id is one common way to get access to restricted areas of a system. To prevent this we have ensured that the session id isn't static for every usage of the system. Every time the user validates himself with his username and password we regenerate the session id. This will make attack much more difficult, as an attacker will have to retrieve the new generated session id every time it is generated. To prevent an attacker from retrieving the session id after the user is done with the system, we have ensured that the session is destroyed when the user logs out of his account. 
 \subparagraph{Hiding of database username and password}
 To avoid having the username and password for the database written in plain text in the php files, we created a configuration file outside of the web server's directories. This configuration file contains the username and password to the database, which the php scripts must read in order to communicate with the database. If we hadn't done this, an attacker could possibly have been able to read or download the php code, and discovered the username and password. This would have given the attacker easy access to alter and read our database. Storing this information outside of the web server, makes it impossible for an attacker to find these without having direct access to the server, either by having our username and password, or having root access to the server. 
 \subparagraph{Secure password storage}
-Even though we store the username and password to the database as far away from a possible attacker, one should still expect the worst, and assume that an attacker might somehow gain access to our database. Many users use the same usernames and/or passwords on several applications, so to reduce the potential damage an attacker can cause, by discovering user passwords, we do not store the passwords in plain text in our database. Instead, we store the passwords' hashes. This is done using php's built-in password-hash function \cite{php-hash}, which uses the bcrypt \cite{schneier} algorithm. This ensures that the users' passwords are never stored anywhere, so attackers are only able to get the password hashes. The most efficient way to break bcrypt is through exhaustive keyspace search \cite{schneier}, which will take a lot of time.
+Even though we store the username and password to the database as far away from a possible attacker, one should still expect the worst, and assume that an attacker might somehow gain access to our database. Many users use the same usernames and/or passwords on several applications, so to reduce the potential damage an attacker can cause, by discovering user passwords, we do not store the passwords in plain text in our database. Instead, we store the passwords' hashes. This is done using php's built-in password-hash function \cite{php-hash}, which uses the bcrypt \cite{schneier} algorithm. This ensures that the users' passwords are never stored anywhere, so attackers are only able to get the password hashes. The most efficient way to break bcrypt is through exhaustive keyspace search \cite{schneier}, which is not very feasible.
 \subparagraph{Code injection avoidence}
-On some of the systems pages our system had weakness for code injection. The weakness existed in registering new users, either in admin or in register, as when the a new username was inputed a possible attacker could register code which would then run next time someone entered the page. To avoid this weakness we added a validation check for the input within the forms, not accepting any characters but ordinary letters and numbers. By doing this we secured our system further and avoided code injection attacks.
+On some of the system's pages our system had weakness for code injection. The weakness existed in registering new users, either in admin or in register. As when a new username was inputed a possible attacker could register code, which would then run next time someone entered the page. To avoid this weakness we added a validation check for the input within the forms, not accepting any characters but ordinary letters and numbers. By doing this we secured our system further and avoided code injection attacks.
 
 \section{Results}
 The lab results consisted of a complete web service including several security measures and functionalities. Each part of the system will be described briefly below.
@@ -116,15 +113,15 @@ The system consists of two parts; one not requiring authentication and one that 
 \paragraph{Web Server}
 An apache web server is used to run the system. The webserver maintains the SSL certificate authentication and hosts the system's web pages.
 \paragraph{Web pages}
-To achieve some sort of human interaction several web pages provides different kinds of functionality which allows a user to get some sort of feedbacks. The web pages are written in HTML and PHP and provides functionality as authenticate users, register new users, log in and out, manage cookies and sessions, and admin settings.
+To achieve some sort of human interaction several web pages provides different kinds of functionality which allows a user to get some sort of feedback. The web pages are written in HTML and PHP and provides functionality as authenticate users, register new users, log in and out, manage cookies and sessions, and admin settings.
 \paragraph{Database}
-A database is used for storing of user information. Within the system's database information like usernames and hashed passwords are stored so it easily can be retrieved by the requering application.
+A database is used for storing of user information. Within the system's database information like usernames and hashed passwords are stored so it easily can be retrieved by the requiring application.
 
 \section{Discussion}
-During implementation of the system we've chosen to use different kind of security measures after what wereasoned would be most secure. Using the SHA512 algorithm for signing of certificates we secure the authenticity of our certificates as this algorithm is one of the safest available and is proven to be quite difficult to exploit. By using a database it is essential to secure sensitive data and prevent loss of information, and we do this by hashing data as well as ensuring that no code or SQL injection occur, we handled all user input as plain text to achieve this. To ensure that cookies aren't transferred in plaintext we've flagged it for secure. To secure the sessions we regenerate the session id every time the user authenticates himself by username and password.   
+During implementation of the system we have chosen to use different kind of security measures after what we reasoned would be hte most secure. Using the SHA512 algorithm for signing of certificates we secure the authenticity of our certificates as this algorithm is one of the safest available and is proven to be quite difficult to exploit. By using a database it is essential to secure sensitive data and prevent loss of information, and we do this by hashing data as well as ensuring that no code or SQL injection occur. We handled all user input as plain text to achieve this. Since we whitelist characters instead of blacklisting characters, we can be quite certain that no code can be injectected, as we only accept characters and numbers. To ensure that cookies aren't transferred in plaintext we've flagged it for secure. Doing this, we make it necessary to break the encryption to read information from the cookie. Preventing session hijacking, we regenerate the session id every time the user authenticates himself with username and password. If an attacker were to use session hijacking, this would require him to constantly acquire new session ids.
  
 \section{Conclusion}
-During these three weeks of labwork we have acomplished to create a web service that employs different kinds of security measures which will provide a secure system. We learned how to implement up-to-date security using open software and deploy this on our own.  
+During these three weeks of labwork we have accomplished to create a web service that employs different kinds of security measures, which provides a secure system. We learned how to implement up-to-date security features, using open software and deploy this in practice.  
 
 \begin{thebibliography}{9}
 
@@ -167,6 +164,16 @@ During these three weeks of labwork we have acomplished to create a web service 
     iSEC Partners
     Details on the CRIME Attack
     \url{https://isecpartners.com/blog/2012/september/details-on-the-crime-attack.aspx}
+
+\bibitem{NSA}
+    itnews.com.au
+    NSA can break some encryption: new Snowden leak
+    \url{http://www.itnews.com.au/News/355942,nsa-can-break-some-encryption-new-snowden-leak.aspx}
+
+\bibitem{cisco}
+    Cisco
+    BREACH, CRIME and Black Hat
+    \url{http://blogs.cisco.com/security/breach-crime-and-blackhat/}
 
 \end{thebibliography}
 
